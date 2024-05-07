@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>REI Fellowship Match Probability Calculator</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <!-- Including Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@1.0.2"></script>
+<style>
+    body {
+        font-family: 'Arial', sans-serif;
+        background-color: #f4f4f9;
+        color: #333;
+        margin: 20px;
+    }
+    h1 {
+        color: #0056b3;
+        text-align: center;
+    }
+    form {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+        max-width: 600px;
+        margin: 20px auto;
+    }
+    .row {
+        margin-bottom: 15px;
+    }
+    label {
+        font-weight: bold;
+        display: block;
+        margin-bottom: 5px;
+    }
+    input[type="number"], input[type="checkbox"], select, button {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+    button {
+        background-color: #0056b3;
+        color: white;
+        border: none;
+        padding: 10px 15px;
+        font-size: 16px;
+        cursor: pointer;
+        margin-top: 10px;
+    }
+    button:hover {
+        background-color: #004494;
+    }
+    #result {
+        font-size: 16px;
+        background-color: #e2eaff;
+        border-left: 5px solid #0056b3;
+        padding: 10px;
+        margin-top: 20px;
+    }
+    .canvas-container {
+    width: 600px; /* Adjust this value based on the width of your form */
+    margin: auto;
+}
+
+canvas {
+    width: 100% !important;
+    max-width: 600px; /* Ensures canvas does not grow beyond this width */
+    height: auto !important;
+}
+.tooltip {
+    position: relative;
+    cursor: pointer; /* Shows a pointer cursor on hover */
+}
+
+.tooltip .tooltiptext {
+    visibility: hidden;
+    width: 300px; /* Adjust the width as needed */
+    background-color: #f8f9fa; /* Lighter background color */
+    color: #333; /* Darker text color */
+    text-align: left;
+    padding: 10px; /* Increase padding for better readability */
+    border-radius: 6px;
+    border: 1px solid #ccc; /* Adding a subtle border */
+    position: absolute;
+    z-index: 1;
+    bottom: 150%; /* Adjust the position as needed */
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0;
+    transition: opacity 0.5s;
+    font-size: 12px; /* Smaller font size */
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* Optional: Adding a slight shadow for better visibility */
+}
+
+.tooltip:hover .tooltiptext {
+    visibility: visible;
+    opacity: 1;
+}
+
+
+</style>
+</head>
+<body>
+<h1>REI Fellowship Match Probability Calculator</h1>
+<form>
+    <div class="row">
+        <label>Medical school:</label>
+        <div>
+            <input type="radio" name="medschooltype" value="1" checked> Allopathic U.S.
+            <input type="radio" name="medschooltype" value="2"> Osteopathic U.S.
+            <input type="radio" name="medschooltype" value="3"> International
+        </div>
+    </div>
+    <div class="row">
+        <label for="doximityCategory4">Residency program:</label>
+        <select id="doximityCategory4">
+            <option value="" disabled selected>Select</option>  
+            <option value="4">AL - University of Alabama Medical Center</option>
+            <option value="1">AL - University of South Alabama College of Medicine/USA Health</option>
+            <option value="2">AR - University of Arkansas for Medical Sciences (UAMS) College of Medicine</option>
+            <option value="1">AZ - Creighton University School of Medicine (Phoenix)</option>
+            <option value="3">AZ - University of Arizona College of Medicine-Phoenix</option>
+            <option value="1">AZ - University of Arizona College of Medicine-Tucson</option>
+            <option value="1">CA - Adventist Health White Memorial</option>
+            <option value="1">CA - Arrowhead Regional Medical Center</option>
+            <option value="3">CA - Cedars-Sinai Medical Center</option>
+            <option value="1">CA - HCA Healthcare Riverside</option>
+            <option value="2">CA - Kaiser Permanente Northern California (Oakland)</option>
+            <option value="3">CA - Kaiser Permanente Northern California (San Francisco)</option>
+            <option value="3">CA - Kaiser Permanente Northern California (Santa Clara)</option>
+            <option value="1">CA - Kaiser Permanente Southern California (Los Angeles)</option>
+            <option value="1">CA - Kern Medical Center</option>
+            <option value="1">CA - Loma Linda University Health Education Consortium</option>
+            <option value="3">CA - Los Angeles County-Harbor-UCLA Medical Center</option>
+            <option value="1">CA - Marian Regional Medical Center</option>
+            <option value="2">CA - Naval Medical Center (San Diego)</option>
+            <option value="1">CA - Santa Clara Valley Medical Center</option>
+            <option value="4">CA - Stanford Health Care-Sponsored Stanford University</option>
+            <option value="4">CA - UCLA David Geffen School of Medicine/UCLA Medical Center</option>
+            <option value="4">CA - University of California (Irvine)</option>
+            <option value="4">CA - University of California (San Diego) Medical Center</option>
+            <option value="4">CA - University of California (San Francisco)</option>
+            <option value="1">CA - University of California (San Francisco)/Fresno</option>
+            <option value="4">CA - University of California Davis Health</option>
+            <option value="4">CA - University of Southern California/LAC+USC Medical Center</option>
+            <option value="1">CO - Swedish Medical Center</option>
+            <option value="4">CO - University of Colorado</option>
+            <option value="2">CT - Bridgeport Hospital/Yale University</option>
+            <option value="1">CT - Danbury Hospital</option>
+            <option value="1">CT - St Francis Hospital and Medical Center</option>
+            <option value="1">CT - Stamford Hospital/Columbia University College of Physicians and Surgeons</option>
+            <option value="2">CT - University of Connecticut</option>
+            <option value="4">CT - Yale-New Haven Medical Center</option>
+            <option value="3">DC - George Washington University</option>
+            <option value="2">DC - Howard University</option>
+            <option value="3">DC - MedStar Health/Washington Hospital Center</option>
+            <option value="2">DC - National Capital Consortium</option>
+            <option value="3">DE - Christiana Care Health Services</option>
+            <option value="1">FL - Bayfront Health St Petersburg</option>
+            <option value="1">FL - HCA Healthcare: East Florida Division GME</option>
+            <option value="1">FL - HCA Healthcare/USF Morsani College of Medicine GME: Brandon Regional Hospital</option>
+            <option value="1">FL - Memorial Healthcare System, Hollywood, Florida</option>
+            <option value="1">FL - Mount Sinai Medical Center of Florida, Inc</option>
+            <option value="3">FL - Orlando Health</option>
+            <option value="1">FL - University of Central Florida/HCA Healthcare GME (Gainesville)</option>
+            <option value="1">FL - University of Central Florida/HCA Healthcare GME (Greater Orlando)</option>
+            <option value="1">FL - University of Central Florida/HCA Healthcare GME (Pensacola)</option>
+            <option value="4">FL - University of Florida</option>
+            <option value="1">FL - University of Florida (Pensacola)</option>
+            <option value="3">FL - University of Florida College of Medicine Jacksonville</option>
+            <option value="2">FL - University of Miami/Jackson Health System</option>
+            <option value="4">FL - University of South Florida Morsani</option>
+            <option value="1">GA - Atrium Health Navicent The Medical Center/Mercer University School of Medicine</option>
+            <option value="4">GA - Emory University School of Medicine</option>
+            <option value="1">GA - HCA Healthcare/Mercer University School of Medicine</option>
+            <option value="1">GA - HCA Healthcare/Mercer University School of Medicine/Memorial Health University Medical Center</option>
+            <option value="1">GA - Medical College of Georgia</option>
+            <option value="1">GA - Morehouse School of Medicine</option>
+            <option value="1">GA - Northeast Georgia Medical Center</option>
+            <option value="1">GA - Wellstar Health System/Wellstar Atlanta Medical Center</option>
+            <option value="1">HI - Tripler Army Medical Center</option>
+            <option value="2">HI - University of Hawaii</option>
+            <option value="3">IA - University of Iowa Hospitals and Clinics</option>
+            <option value="1">IL - Advocate Health Care/Advocate Illinois Masonic Medical Center</option>
+            <option value="3">IL - Advocate Health Care/Advocate Lutheran General Hospital</option>
+            <option value="1">IL - Ascension Illinois/Saint Alexius</option>
+            <option value="1">IL - Ascension Illinois/Saint Joseph (Chicago)</option>
+            <option value="1">IL - Carle Foundation Hospital</option>
+            <option value="3">IL - Loyola University Medical Center</option>
+            <option value="4">IL - McGaw Medical Center of Northwestern University</option>
+            <option value="1">IL - Mount Sinai Hospital Medical Center of Chicago</option>
+            <option value="3">IL - Rush University Medical Center</option>
+            <option value="1">IL - Southern Illinois University</option>
+            <option value="4">IL - University of Chicago</option>
+            <option value="3">IL - University of Illinois College of Medicine at Chicago</option>
+            <option value="1">IL - University of Illinois College of Medicine at Peoria</option>
+            <option value="1">IN - Ascension St Vincent Hospital Indianapolis</option>
+            <option value="2">IN - Indiana University School of Medicine</option>
+            <option value="1">KS - HCA Healthcare Kansas City/Overland Park Regional Medical Center</option>
+            <option value="1">KS - University of Kansas (Wichita)</option>
+            <option value="2">KS - University of Kansas School of Medicine</option>
+            <option value="1">KY - Saint Joseph Hospital</option>
+            <option value="2">KY - University of Kentucky College of Medicine</option>
+            <option value="1">KY - University of Kentucky College of Medicine (Bowling Green)</option>
+            <option value="1">KY - University of Louisville School of Medicine</option>
+            <option value="2">LA - Louisiana State University (Shreveport)</option>
+            <option value="3">LA - Louisiana State University School of Medicine</option>
+            <option value="1">LA - Louisiana State University School of Medicine (Baton Rouge)</option>
+            <option value="1">LA - Ochsner Clinic Foundation</option>
+            <option value="2">LA - Tulane University</option>
+            <option value="4">MA - Beth Israel Deaconess Medical Center</option>
+            <option value="3">MA - Boston University Medical Center</option>
+            <option value="4">MA - Brigham and Women's Hospital/Massachusetts General Hospital</option>
+            <option value="4">MA - Tufts Medical Center</option>
+            <option value="1">MA - UMMS-Baystate</option>
+            <option value="2">MA - University of Massachusetts</option>
+            <option value="1">MD - Anne Arundel Medical Center</option>
+            <option value="4">MD - Johns Hopkins University</option>
+            <option value="1">MD - Sinai Hospital of Baltimore</option>
+            <option value="2">MD - University of Maryland</option>
+            <option value="2">ME - Maine Medical Center</option>
+            <option value="1">MI - Ascension Genesys Hospital</option>
+            <option value="1">MI - Ascension Macomb-Oakland Hospital</option>
+            <option value="1">MI - Ascension St John Hospital</option>
+            <option value="1">MI - Beaumont Health (Dearborn)</option>
+            <option value="2">MI - Beaumont Health (Farmington Hills)</option>
+            <option value="4">MI - Beaumont Health (Royal Oak)</option>
+            <option value="1">MI - Beaumont Health (Trenton)</option>
+            <option value="1">MI - Central Michigan University College of Medicine</option>
+            <option value="2">MI - Detroit Medical Center/Wayne State University</option>
+            <option value="1">MI - Garden City Hospital</option>
+            <option value="1">MI - Henry Ford Health/Henry Ford Macomb Hospital</option>
+            <option value="1">MI - Henry Ford Health/Henry Ford Wyandotte Hospital</option>
+            <option value="2">MI - Henry Ford Hospital/Wayne State University</option>
+            <option value="1">MI - Hurley Medical Center/Michigan State University</option>
+            <option value="1">MI - McLaren Health Care/Greater Lansing/MSU</option>
+            <option value="1">MI - McLaren Health Care/Macomb/MSU</option>
+            <option value="1">MI - Metro Health University of Michigan Health (Metro Health)</option>
+            <option value="1">MI - Sparrow Hospital/Michigan State University</option>
+            <option value="2">MI - Spectrum Health/Michigan State University</option>
+            <option value="2">MI - St Joseph Mercy Ann Arbor</option>
+            <option value="1">MI - St Joseph Mercy-Oakland</option>
+            <option value="1">MI - Trinity Health Muskegon</option>
+            <option value="4">MI - University of Michigan Health System</option>
+            <option value="1">MI - Western Michigan University Homer Stryker MD School of Medicine</option>
+            <option value="4">MN - Mayo Clinic College of Medicine and Science (Rochester)</option>
+            <option value="2">MN - University of Minnesota</option>
+            <option value="1">MO - Mercy Hospital (St Louis)</option>
+            <option value="3">MO - St Louis University School of Medicine</option>
+            <option value="2">MO - University of Missouri-Columbia</option>
+            <option value="1">MO - University of Missouri-Kansas City School of Medicine</option>
+            <option value="4">MO - Washington University/B-JH/SLCH Consortium</option>
+            <option value="2">MS - University of Mississippi Medical Center</option>
+            <option value="1">NC - Campbell University</option>
+            <option value="3">NC - Carolinas Medical Center</option>
+            <option value="4">NC - Duke University Hospital</option>
+            <option value="3">NC - Mountain Area Health Education Center</option>
+            <option value="1">NC - Novant Health New Hanover Regional Medical Center</option>
+            <option value="4">NC - University of North Carolina Hospitals</option>
+            <option value="3">NC - Vidant Medical Center/East Carolina University</option>
+            <option value="4">NC - Wake Forest University Baptist Medical Center</option>
+            <option value="1">NC - Womack Army Medical Center</option>
+            <option value="1">NE - Creighton University School of Medicine (Omaha)</option>
+            <option value="1">NE - University of Nebraska Medical Center College of Medicine</option>
+            <option value="2">NH - Dartmouth-Hitchcock/Mary Hitchcock Memorial Hospital</option>
+            <option value="2">NJ - Atlantic Health System/Morristown Medical Center</option>
+            <option value="1">NJ - Cooper Medical School of Rowan University/Cooper University Hospital</option>
+            <option value="1">NJ - Hackensack University Medical Center</option>
+            <option value="1">NJ - Inspira Health Network/Inspira Medical Center Vineland</option>
+            <option value="1">NJ - Jefferson Health New Jersey</option>
+            <option value="1">NJ - Jersey Shore University Medical Center</option>
+            <option value="3">NJ - Rutgers Health/Cooperman Barnabas Medical Center</option>
+            <option value="1">NJ - Rutgers Health/Jersey City Medical Center</option>
+            <option value="2">NJ - Rutgers Health/Monmouth Medical Center</option>
+            <option value="3">NJ - Rutgers Health/New Jersey Medical School</option>
+            <option value="2">NJ - Rutgers Health/Newark Beth Israel Medical Center</option>
+            <option value="3">NJ - Rutgers Health/Robert Wood Johnson Medical School</option>
+            <option value="3">NJ - Saint Peter's University Hospital/Rutgers Robert Wood Johnson Medical School</option>
+            <option value="1">NJ - Virtua</option>
+            <option value="3">NM - University of New Mexico School of Medicine</option>
+            <option value="1">NV - HCA Healthcare Sunrise Health Graduate Medical Education</option>
+            <option value="1">NV - Kirk Kerkorian School of Medicine at UNLV</option>
+            <option value="1">NY - Albany Medical Center</option>
+            <option value="1">NY - Bronx</option>
+            <option value="1">NY - BronxCare Health System</option>
+            <option value="1">NY - Brooklyn Hospital Center</option>
+            <option value="1">NY - Flushing Hospital Medical Center</option>
+            <option value="1">NY - Good Samaritan Hospital Medical Center</option>
+            <option value="4">NY - Icahn School of Medicine at Mount Sinai/Mount Sinai Hospital</option>
+            <option value="1">NY - Icahn School of Medicine at Mount Sinai/NYC Health and Hospitals (Queens)</option>
+            <option value="3">NY - Icahn School of Medicine at Mount Sinai/South Nassau</option>
+            <option value="3">NY - Icahn School of Medicine at Mount Sinai/West</option>
+            <option value="1">NY - Jamaica Hospital Medical Center</option>
+            <option value="1">NY - Lincoln Medical and Mental Health Center</option>
+            <option value="2">NY - Maimonides Medical Center</option>
+            <option value="4">NY - Montefiore Medical Center/Albert Einstein College of Medicine</option>
+            <option value="1">NY - Nassau University Medical Center</option>
+            <option value="2">NY - New York Medical College at Westchester Medical Center</option>
+            <option value="4">NY - New York Presbyterian Hospital (Columbia Campus)</option>
+            <option value="4">NY - New York Presbyterian Hospital (Cornell Campus)</option>
+            <option value="2">NY - New York-Presbyterian Brooklyn Methodist Hospital</option>
+            <option value="1">NY - NYC Health & Hospitals/South Brooklyn Health</option>
+            <option value="4">NY - NYU Grossman School of Medicine</option>
+            <option value="3">NY - NYU Long Island School of Medicine</option>
+            <option value="1">NY - Richmond University Medical Center</option>
+            <option value="1">NY - Rochester General Hospital</option>
+            <option value="1">NY - St John's Episcopal Hospital-South Shore</option>
+            <option value="3">NY - Stony Brook Medicine/University Hospital</option>
+            <option value="3">NY - SUNY Downstate Health Sciences University</option>
+            <option value="2">NY - SUNY Upstate Medical University</option>
+            <option value="1">NY - University at Buffalo</option>
+            <option value="1">NY - University at Buffalo (Sisters of Charity)</option>
+            <option value="3">NY - University of Rochester</option>
+            <option value="1">NY - Wyckoff Heights Medical Center</option>
+            <option value="4">NY - Zucker School of Medicine at Hofstra/Northwell</option>
+            <option value="4">NY - Zucker School of Medicine at Hofstra/Northwell at Lenox Hill Hospital</option>
+            <option value="4">NY - Zucker School of Medicine at Hofstra/Northwell at South Shore University Hospital</option>
+            <option value="4">NY - Zucker School of Medicine at Hofstra/Northwell at Staten Island University Hospital</option>
+            <option value="2">OH - Akron General Medical Center/NEOMED</option>
+            <option value="1">OH - Aultman Hospital/NEOMED</option>
+            <option value="3">OH - Case Western Reserve University/University Hospitals Cleveland Medical Center</option>
+            <option value="4">OH - Cleveland Clinic Foundation</option>
+            <option value="1">OH - Kettering Health Network</option>
+            <option value="1">OH - Mercy St Vincent Medical Center</option>
+            <option value="4">OH - Ohio State University/Mt Carmel Hospital</option>
+            <option value="1">OH - OhioHealth/Doctors Hospital</option>
+            <option value="2">OH - OhioHealth/Riverside Methodist Hospital</option>
+            <option value="1">OH - Summa Health System/NEOMED</option>
+            <option value="3">OH - The MetroHealth System/Case Western Reserve University</option>
+            <option value="2">OH - TriHealth (Bethesda North and Good Samaritan Hospitals)</option>
+            <option value="3">OH - University of Cincinnati Medical Center/College of Medicine</option>
+            <option value="1">OH - University of Toledo</option>
+            <option value="3">OH - Wright State University</option>
+            <option value="2">OK - Oklahoma State University Center for Health Sciences</option>
+            <option value="2">OK - Osteopathic Medical Education Consortium of Oklahoma, Inc. (OMECO)/Oklahoma State University</option>
+            <option value="1">OK - St Anthony Hospital</option>
+            <option value="3">OK - University of Oklahoma Health Sciences Center</option>
+            <option value="1">OK - University of Oklahoma School of Community Medicine (Tulsa)</option>
+            <option value="3">OR - Oregon Health & Science University</option>
+            <option value="4">PA - Abington Memorial Hospital</option>
+            <option value="1">PA - Albert Einstein Healthcare Network</option>
+            <option value="2">PA - Allegheny Health Network Medical Education Consortium (WPH)</option>
+            <option value="1">PA - Crozier-Chester Medical Center</option>
+            <option value="3">PA - Geisinger Health System</option>
+            <option value="4">PA - Hospital of the University of Pennsylvania</option>
+            <option value="3">PA - Lehigh Valley Health Network</option>
+            <option value="1">PA - Main Line Health System/Lankenau Medical Center</option>
+            <option value="1">PA - Penn State Milton S Hershey Medical Center</option>
+            <option value="4">PA - Pennsylvania Hospital of the University of Pennsylvania Health System</option>
+            <option value="3">PA - Sidney Kimmel Medical College at Thomas Jefferson University/TJUH</option>
+            <option value="1">PA - St Joseph's University Medical Center</option>
+            <option value="2">PA - St Luke's University Hospital</option>
+            <option value="2">PA - Temple University Hospital</option>
+            <option value="1">PA - Tower Health/Phoenixville Hospital</option>
+            <option value="2">PA - Tower Health/Reading Hospital</option>
+            <option value="4">PA - UPMC Medical Education</option>
+            <option value="1">PA - UPMC Medical Education (Harrisburg)</option>
+            <option value="1">PA - Wellspan Health/York Hospital</option>
+            <option value="1">PR - Hospital Episcopal San Lucas/Ponce School of Medicine</option>
+            <option value="1">PR - San Juan City Hospital</option>
+            <option value="1">PR - University of Puerto Rico</option>
+            <option value="4">RI - Women and Infants Hospital of Rhode Island/Brown University</option>
+            <option value="4">SC - Medical University of South Carolina</option>
+            <option value="1">SC - Prisma Health/University of South Carolina SOM Columbia (Columbia)</option>
+            <option value="2">SC - Prisma Health/University of South Carolina SOM Greenville (Greenville)</option>
+            <option value="1">TN - Baptist Memorial Medical Education</option>
+            <option value="1">TN - East Tennessee State University/Quillen College of Medicine</option>
+            <option value="1">TN - Meharry Medical College</option>
+            <option value="2">TN - University of Tennessee</option>
+            <option value="1">TN - University of Tennessee College of Medicine (Nashville)</option>
+            <option value="1">TN - University of Tennessee College of Medicine at Chattanooga</option>
+            <option value="2">TN - University of Tennessee Medical Center at Knoxville</option>
+            <option value="4">TN - Vanderbilt University Medical Center</option>
+            <option value="1">TX - Baylor All Saints Medical Center Fort Worth</option>
+            <option value="4">TX - Baylor College of Medicine</option>
+            <option value="2">TX - Baylor University Medical Center</option>
+            <option value="1">TX - HCA Healthcare Las Palmas Del Sol</option>
+            <option value="1">TX - HCA Houston Healthcare (West)/University of Houston</option>
+            <option value="1">TX - HCA Medical City Healthcare UNT-TCU Graduate Medical Education</option>
+            <option value="1">TX - John Peter Smith Hospital (Tarrant County Hospital District)</option>
+            <option value="1">TX - Methodist Health System Dallas</option>
+            <option value="1">TX - Methodist Hospital (Houston)</option>
+            <option value="1">TX - San Antonio Uniformed Services Health Education Consortium</option>
+            <option value="1">TX - St. David's Healthcare Graduate Medical Education</option>
+            <option value="3">TX - Texas A&M College of Medicine-Scott and White Medical Center (Temple)</option>
+            <option value="1">TX - Texas Tech University (Amarillo)</option>
+            <option value="1">TX - Texas Tech University (Permian Basin)</option>
+            <option value="1">TX - Texas Tech University Health Sciences Center at Lubbock</option>
+            <option value="1">TX - Texas Tech University HSC El Paso</option>
+            <option value="1">TX - Texas Tech University HSC El Paso</option>
+            <option value="3">TX - University of Texas at Austin Dell Medical School</option>
+            <option value="3">TX - University of Texas Health Science Center at Houston</option>
+            <option value="3">TX - University of Texas Health Science Center San Antonio Joe and Teresa Lozano Long School of Medicine</option>
+            <option value="3">TX - University of Texas Medical Branch Hospitals</option>
+            <option value="2">TX - University of Texas RGV (DHR)</option>
+            <option value="4">TX - University of Texas Southwestern Medical Center</option>
+            <option value="4">UT - University of Utah Health</option>
+            <option value="3">VA - Carilion Clinic-Virginia Tech Carilion School of Medicine</option>
+            <option value="3">VA - Eastern Virginia Medical School</option>
+            <option value="2">VA - Inova Fairfax Medical Campus</option>
+            <option value="2">VA - Naval Medical Center (Portsmouth)</option>
+            <option value="1">VA - Riverside Regional Medical Center</option>
+            <option value="4">VA - University of Virginia Medical Center</option>
+            <option value="4">VA - Virginia Commonwealth University Health System</option>
+            <option value="3">VT - University of Vermont Medical Center</option>
+            <option value="1">WA - Madigan Army Medical Center</option>
+            <option value="4">WA - University of Washington</option>
+            <option value="1">WI - Aurora Health Care</option>
+            <option value="2">WI - Medical College of Wisconsin Affiliated Hospitals</option>
+            <option value="3">WI - University of Wisconsin Hospitals and Clinics</option>
+            <option value="1">WV - Charleston Area Medical Center/CAMC Institute for Academic Medicine</option>
+            <option value="1">WV - Marshall University School of Medicine</option>
+            <option value="1">WV - West Virginia University</option>
+            <option value="1">Other - International or Not Listed</option>
+        </select>
+        </div>
+        <div class="row">
+            <label>Residency has an affiliated REI fellowship:</label>
+            <input type="checkbox" id="residencyhasfellowship">
+        </div>    
+        <div class="row">
+            <label>Projects in progress / unpublished articles or abstracts (#):</label>
+            <input type="number" id="articlesAbstractsOtherthanP" step="1" min="0">
+        </div>
+        <div class="row">
+            <label>Poster presentations at national or regional meetings (#):</label>
+            <input type="number" id="posterPresentations" step="1" min="0">
+        </div>
+        <button type="button" onclick="calculateProbability()">Calculate Probability</button>
+    </form>
+    <p id="result"></p>
+    
+    <div class="canvas-container">
+        <canvas id="matchHistogram"></canvas>
+        <canvas id="noMatchHistogram"></canvas>
+    </div>
+    
+    <script>
+    // Probability data from the table
+    var probabilityData = [
+    { probability: 0.1038182, match: 0, noMatch: 2 },
+    { probability: 0.1192938, match: 0, noMatch: 1 },
+    { probability: 0.1277555, match: 0, noMatch: 1 },
+    { probability: 0.1317826, match: 0, noMatch: 1 },
+    { probability: 0.1436277, match: 0, noMatch: 2 },
+    { probability: 0.1507256, match: 1, noMatch: 1 },
+    { probability: 0.1610092, match: 0, noMatch: 1 },
+    { probability: 0.168899, match: 0, noMatch: 1 },
+    { probability: 0.1718524, match: 0, noMatch: 1 },
+    { probability: 0.1952598, match: 0, noMatch: 1 },
+    { probability: 0.204419, match: 0, noMatch: 1 },
+    { probability: 0.2101589, match: 0, noMatch: 1 },
+    { probability: 0.2273334, match: 0, noMatch: 2 },
+    { probability: 0.2319793, match: 1, noMatch: 1 },
+    { probability: 0.2413584, match: 0, noMatch: 1 },
+    { probability: 0.2452051, match: 0, noMatch: 1 },
+    { probability: 0.2461995, match: 1, noMatch: 2 },
+    { probability: 0.2476766, match: 1, noMatch: 0 },
+    { probability: 0.2520028, match: 1, noMatch: 0 },
+    { probability: 0.2585047, match: 0, noMatch: 1 },
+    { probability: 0.2609952, match: 0, noMatch: 1 },
+    { probability: 0.2711333, match: 0, noMatch: 1 },
+    { probability: 0.2763541, match: 2, noMatch: 6 },
+    { probability: 0.2911508, match: 0, noMatch: 1 },
+    { probability: 0.2922594, match: 0, noMatch: 2 },
+    { probability: 0.3086897, match: 0, noMatch: 1 },
+    { probability: 0.3210469, match: 0, noMatch: 1 },
+    { probability: 0.3256186, match: 1, noMatch: 0 },
+    { probability: 0.3383219, match: 1, noMatch: 1 },
+    { probability: 0.3413076, match: 0, noMatch: 1 },
+    { probability: 0.3430153, match: 1, noMatch: 0 },
+    { probability: 0.3512626, match: 0, noMatch: 1 },
+    { probability: 0.3530748, match: 1, noMatch: 0 },
+    { probability: 0.3578622, match: 1, noMatch: 0 },
+    { probability: 0.3590961, match: 4, noMatch: 2 },
+    { probability: 0.3644335, match: 1, noMatch: 0 },
+    { probability: 0.3692791, match: 1, noMatch: 1 },
+    { probability: 0.3713011, match: 0, noMatch: 1 },
+    { probability: 0.3761919, match: 0, noMatch: 1 },
+    { probability: 0.384252, match: 0, noMatch: 1 },
+    { probability: 0.3927242, match: 0, noMatch: 1 },
+    { probability: 0.3958175, match: 1, noMatch: 2 },
+    { probability: 0.4286278, match: 3, noMatch: 2 },
+    { probability: 0.4445842, match: 0, noMatch: 1 },
+    { probability: 0.4587714, match: 0, noMatch: 1 },
+    { probability: 0.4705898, match: 1, noMatch: 0 },
+    { probability: 0.4782371, match: 1, noMatch: 0 },
+    { probability: 0.4815589, match: 0, noMatch: 1 },
+    { probability: 0.4867775, match: 1, noMatch: 0 },
+    { probability: 0.4901029, match: 0, noMatch: 1 },
+    { probability: 0.4955845, match: 1, noMatch: 0 },
+    { probability: 0.499755, match: 0, noMatch: 1 },
+    { probability: 0.5016517, match: 0, noMatch: 1 },
+    { probability: 0.5096462, match: 1, noMatch: 0 },
+    { probability: 0.5120971, match: 1, noMatch: 0 },
+    { probability: 0.5173081, match: 0, noMatch: 1 },
+    { probability: 0.5206305, match: 1, noMatch: 0 },
+    { probability: 0.525843, match: 1, noMatch: 0 },
+    { probability: 0.5291601, match: 2, noMatch: 3 },
+    { probability: 0.5332089, match: 1, noMatch: 0 },
+    { probability: 0.5523401, match: 0, noMatch: 1 },
+    { probability: 0.5543709, match: 0, noMatch: 1 },
+    { probability: 0.5645947, match: 1, noMatch: 0 },
+    { probability: 0.5735189, match: 0, noMatch: 1 },
+    { probability: 0.5839716, match: 1, noMatch: 0 },
+    { probability: 0.5925232, match: 1, noMatch: 0 },
+    { probability: 0.6007547, match: 0, noMatch: 1 },
+    { probability: 0.6057557, match: 1, noMatch: 0 },
+    { probability: 0.6224834, match: 0, noMatch: 2 },
+    { probability: 0.6242647, match: 1, noMatch: 0 },
+    { probability: 0.6285813, match: 1, noMatch: 0 },
+    { probability: 0.6327614, match: 1, noMatch: 0 },
+    { probability: 0.6376033, match: 1, noMatch: 0 },
+    { probability: 0.6406729, match: 0, noMatch: 1 },
+    { probability: 0.64292, match: 1, noMatch: 0 },
+    { probability: 0.6477026, match: 0, noMatch: 1 },
+    { probability: 0.6507335, match: 1, noMatch: 0 },
+    { probability: 0.6525366, match: 1, noMatch: 0 },
+    { probability: 0.6554675, match: 0, noMatch: 1 },
+    { probability: 0.6584668, match: 1, noMatch: 1 },
+    { probability: 0.6606615, match: 1, noMatch: 0 },
+    { probability: 0.6682871, match: 1, noMatch: 0 },
+    { probability: 0.6748086, match: 1, noMatch: 0 },
+    { probability: 0.6791408, match: 1, noMatch: 0 },
+    { probability: 0.685385, match: 1, noMatch: 0 },
+    { probability: 0.6882477, match: 0, noMatch: 2 },
+    { probability: 0.6927134, match: 0, noMatch: 1 },
+    { probability: 0.6948553, match: 1, noMatch: 0 },
+    { probability: 0.697605, match: 1, noMatch: 0 },
+    { probability: 0.7019947, match: 1, noMatch: 1 },
+    { probability: 0.7047713, match: 1, noMatch: 1 },
+    { probability: 0.7091004, match: 0, noMatch: 1 },
+    { probability: 0.7180882, match: 1, noMatch: 0 },
+    { probability: 0.7207745, match: 1, noMatch: 0 },
+    { probability: 0.7310335, match: 1, noMatch: 0 },
+    { probability: 0.7310401, match: 1, noMatch: 0 },
+    { probability: 0.7347493, match: 1, noMatch: 0 },
+    { probability: 0.7362348, match: 1, noMatch: 0 },
+    { probability: 0.7381286, match: 0, noMatch: 1 },
+    { probability: 0.7417286, match: 1, noMatch: 0 },
+    { probability: 0.7421474, match: 0, noMatch: 1 },
+    { probability: 0.7472082, match: 1, noMatch: 0 },
+    { probability: 0.7533703, match: 0, noMatch: 1 },
+    { probability: 0.7610467, match: 0, noMatch: 1 },
+    { probability: 0.7616888, match: 1, noMatch: 0 },
+    { probability: 0.7641515, match: 1, noMatch: 0 },
+    { probability: 0.7709224, match: 1, noMatch: 0 },
+    { probability: 0.7719226, match: 1, noMatch: 0 },
+    { probability: 0.7755891, match: 2, noMatch: 0 },
+    { probability: 0.7808821, match: 1, noMatch: 1 },
+    { probability: 0.7905265, match: 1, noMatch: 0 },
+    { probability: 0.8025301, match: 0, noMatch: 1 },
+    { probability: 0.8037297, match: 1, noMatch: 0 },
+    { probability: 0.823402, match: 1, noMatch: 0 },
+    { probability: 0.8256024, match: 0, noMatch: 1 },
+    { probability: 0.8261452, match: 0, noMatch: 2 },
+    { probability: 0.8334343, match: 1, noMatch: 0 },
+    { probability: 0.8376485, match: 1, noMatch: 0 },
+    { probability: 0.8474728, match: 1, noMatch: 0 },
+    { probability: 0.8573069, match: 3, noMatch: 0 },
+    { probability: 0.862645, match: 1, noMatch: 0 },
+    { probability: 0.8641726, match: 1, noMatch: 0 },
+    { probability: 0.8666067, match: 1, noMatch: 0 },
+    { probability: 0.8828875, match: 1, noMatch: 0 },
+    { probability: 0.8869776, match: 1, noMatch: 0 },
+    { probability: 0.8907326, match: 2, noMatch: 2 },
+    { probability: 0.8981128, match: 3, noMatch: 0 },
+    { probability: 0.899695, match: 1, noMatch: 0 },
+    { probability: 0.901565, match: 1, noMatch: 0 },
+    { probability: 0.9050477, match: 1, noMatch: 1 },
+    { probability: 0.9053996, match: 1, noMatch: 0 },
+    { probability: 0.9060777, match: 1, noMatch: 0 },
+    { probability: 0.9065334, match: 1, noMatch: 0 },
+    { probability: 0.9098578, match: 3, noMatch: 0 },
+    { probability: 0.911557, match: 5, noMatch: 0 },
+    { probability: 0.9118871, match: 1, noMatch: 0 },
+    { probability: 0.912801, match: 1, noMatch: 0 },
+    { probability: 0.9156545, match: 1, noMatch: 0 },
+    { probability: 0.916068, match: 3, noMatch: 0 },
+    { probability: 0.9176607, match: 2, noMatch: 0 },
+    { probability: 0.921887, match: 5, noMatch: 1 },
+    { probability: 0.9220468, match: 1, noMatch: 0 },
+    { probability: 0.9233785, match: 4, noMatch: 0 },
+    { probability: 0.9235139, match: 1, noMatch: 0 },
+    { probability: 0.9264327, match: 1, noMatch: 0 },
+    { probability: 0.9273347, match: 2, noMatch: 0 },
+    { probability: 0.9276106, match: 1, noMatch: 0 },
+    { probability: 0.9287302, match: 1, noMatch: 0 },
+    { probability: 0.9302431, match: 1, noMatch: 0 },
+    { probability: 0.9311017, match: 2, noMatch: 0 },
+    { probability: 0.9315869, match: 1, noMatch: 0 },
+    { probability: 0.9320914, match: 1, noMatch: 0 },
+    { probability: 0.9324302, match: 1, noMatch: 0 },
+    { probability: 0.9359514, match: 3, noMatch: 0 },
+    { probability: 0.9371926, match: 2, noMatch: 0 },
+    { probability: 0.9385377, match: 1, noMatch: 0 },
+    { probability: 0.93941, match: 1, noMatch: 0 },
+    { probability: 0.9397166, match: 1, noMatch: 0 },
+    { probability: 0.9404815, match: 3, noMatch: 1 },
+    { probability: 0.9416404, match: 3, noMatch: 1 },
+    { probability: 0.9436085, match: 1, noMatch: 0 },
+    { probability: 0.9447101, match: 1, noMatch: 0 },
+    { probability: 0.9462904, match: 1, noMatch: 0 },
+    { probability: 0.9486547, match: 1, noMatch: 0 },
+    { probability: 0.9507551, match: 1, noMatch: 0 },
+    { probability: 0.9513744, match: 1, noMatch: 0 },
+    { probability: 0.952332, match: 1, noMatch: 0 },
+    { probability: 0.9548663, match: 1, noMatch: 0 },
+    { probability: 0.9557583, match: 2, noMatch: 0 },
+    { probability: 0.9572718, match: 2, noMatch: 0 },
+    { probability: 0.9581184, match: 1, noMatch: 0 },
+    { probability: 0.9589489, match: 2, noMatch: 0 },
+    { probability: 0.9597636, match: 1, noMatch: 0 },
+    { probability: 0.9611458, match: 1, noMatch: 0 },
+    { probability: 0.9619186, match: 1, noMatch: 0 },
+    { probability: 0.9639625, match: 1, noMatch: 0 },
+    { probability: 0.9646814, match: 1, noMatch: 0 },
+    { probability: 0.9659005, match: 1, noMatch: 0 },
+    { probability: 0.9665821, match: 2, noMatch: 0 },
+    { probability: 0.9672505, match: 1, noMatch: 0 },
+    { probability: 0.967906, match: 1, noMatch: 0 },
+    { probability: 0.9683839, match: 1, noMatch: 0 },
+    { probability: 0.9690174, match: 2, noMatch: 0 },
+    { probability: 0.9706919, match: 1, noMatch: 0 },
+    { probability: 0.9712806, match: 1, noMatch: 0 },
+    { probability: 0.9722785, match: 1, noMatch: 0 },
+    { probability: 0.9728361, match: 1, noMatch: 0 },
+    { probability: 0.9748276, match: 1, noMatch: 0 },
+    { probability: 0.9761958, match: 1, noMatch: 0 },
+    { probability: 0.97883, match: 1, noMatch: 0 },
+    { probability: 0.9795712, match: 2, noMatch: 0 },
+    { probability: 0.9814624, match: 1, noMatch: 0 },
+    { probability: 0.9821131, match: 1, noMatch: 0 },
+    { probability: 0.983436, match: 1, noMatch: 0 },
+    { probability: 0.9846626, match: 1, noMatch: 0 },
+    { probability: 0.9852811, match: 1, noMatch: 0 },
+    { probability: 0.9857997, match: 2, noMatch: 0 },
+    { probability: 0.9865797, match: 1, noMatch: 0 },
+    { probability: 0.9885, match: 1, noMatch: 0 },
+    { probability: 0.9920284, match: 1, noMatch: 0 },
+    { probability: 0.9932238, match: 1, noMatch: 0 },
+    { probability: 0.9947861, match: 1, noMatch: 0 },
+    { probability: 0.9955612, match: 1, noMatch: 0 }
+];
+var consolidatedData = new Array(20).fill(null).map(() => ({ match: 0, noMatch: 0 }));
+function getBinIndex(probability) {
+    return Math.min(Math.floor(probability * 20), 19); // Ensure the max index is 19
+}
+probabilityData.forEach(item => {
+    var index = getBinIndex(item.probability);
+    consolidatedData[index].match += item.match;
+    consolidatedData[index].noMatch += item.noMatch;
+});
+var displayData = consolidatedData.map((data, index) => ({
+    probabilityRange: `${(index * 5)}% - ${(index * 5 + 5)}%`,
+    match: data.match,
+    noMatch: data.noMatch
+}));
+console.log(displayData);
+
+// Initialize the histograms when the page is loaded
+var matchChart, noMatchChart;
+document.addEventListener('DOMContentLoaded', function () {
+    var ctxMatch = document.getElementById('matchHistogram').getContext('2d');
+    var ctxNoMatch = document.getElementById('noMatchHistogram').getContext('2d');
+    
+    // Prepare data for the histograms using 'displayData' instead of 'probabilityData'
+    var matchLabels = displayData.map(item => item.probabilityRange);
+    var matchCounts = displayData.map(item => item.match);
+    var noMatchCounts = displayData.map(item => item.noMatch);
+
+    // Match histogram
+    matchChart = new Chart(ctxMatch, {
+        type: 'bar',
+        data: {
+            labels: matchLabels,
+            datasets: [{
+                label: 'Matched',
+                data: matchCounts,
+                backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                borderColor: 'rgba(54, 162, 235, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    suggestedMax: 70
+                }
+            },
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'Matched applicants: Predicted probability distribution (n=197)',
+                    font: {
+                        size: 14
+                    }
+                }
+            }
+        }
+    });
+
+    // No match histogram
+    noMatchChart = new Chart(ctxNoMatch, {
+        type: 'bar',
+        data: {
+            labels: matchLabels,
+            datasets: [{
+                label: 'Not Matched',
+                data: noMatchCounts,
+                backgroundColor: 'rgba(255, 99, 132, 0.6)',
+                borderColor: 'rgba(255, 99, 132, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    suggestedMax: 70
+                }
+            },
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'Unmatched applicants: Predicted probability distribution (n=89)',
+                    font: {
+                        size: 14
+                    }
+                }
+            }
+        }
+    });
+});
+
+    
+function calculateProbability() {
+    var medschooltype = document.querySelector('input[name="medschooltype"]:checked').value;
+    var type2 = medschooltype === "2" ? 1 : 0;
+    var type3 = medschooltype === "3" ? 1 : 0;
+    var fellowship = document.getElementById("residencyhasfellowship").checked ? 1 : 0;
+    var doximity = parseFloat(document.getElementById("doximityCategory4").value);
+    var articles = parseFloat(document.getElementById("articlesAbstractsOtherthanP").value);
+    var presentations = parseFloat(document.getElementById("posterPresentations").value);
+
+    var logOdds = -1.736865 - 1.036516 * type2 - 0.7663027 * type3 + 1.51996 * fellowship
+                  + 0.539696 * doximity + 0.2918375 * articles + 0.0781833 * presentations;
+    var probability = 1 / (1 + Math.exp(-logOdds));
+    var percentProbability = (probability * 100).toFixed(2); // Convert probability to percentage
+
+    var tooltipText = "This probability is based on the written application only and does not account for information in the personal statement, letters of recommendation, interview performance, in-person evaluation, or other parameters not listed below.<br>The following variables were evaluated as potential predictors in the creation of this model: age, sex, race, ethnicity, citizenship/work authorization, medical school type, region of U.S. medical school, additional advanced degree, USMLE Step scores, CREOG scores, region of U.S. residency, residency ranking, residency affiliation with an REI fellowship, number of research/work/volunteer experiences, number of first-author publications, total articles published, unpublished articles/abstracts, book chapters, oral and poster presentations, and online publications.";
+
+    document.getElementById("result").innerHTML = `Predicted Probability of Match: <span class="tooltip">${percentProbability}%<span class="tooltiptext">${tooltipText}</span></span>`;
+
+    // Update charts with the calculated probability percentage
+    updateCharts(percentProbability);
+}
+
+
+
+
+function updateCharts(probabilityPercent) {
+    // Calculate bin index
+    let binIndex = Math.floor(probabilityPercent / 5);
+    if (binIndex >= 20) binIndex = 19; // Ensure it doesn't exceed the index for the last bin
+
+    // Define annotation for the vertical line
+    const annotation = {
+        annotations: {
+            line: {
+                type: 'line',
+                xMin: binIndex,
+                xMax: binIndex,
+                borderColor: 'red',
+                borderWidth: 2,
+                borderDash: [6, 6],
+                label: {
+                    content: 'Your score: ' + probabilityPercent + '%',
+                    enabled: true,
+                    position: "end",
+                    yAdjust: -50, // Move the label up by 20 pixels
+
+                }
+            }
+        }
+    };
+
+    // Check if charts have been initialized
+    if (matchChart && noMatchChart) {
+        matchChart.options.plugins.annotation = annotation;
+        noMatchChart.options.plugins.annotation = annotation;
+
+        matchChart.update();
+        noMatchChart.update();
+    } else {
+        console.error("Charts not initialized");
+    }
+}
+
+// Ensure your chart initialization configures x-axis labels from 0% to 95% in 5% increments
+
+    </script>
+    </body>
+    </html>

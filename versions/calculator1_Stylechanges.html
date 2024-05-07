@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>REI Fellowship Match Probability Calculator</title>
+
+<script>
+function calculateProbability() {
+    var medschooltype = document.querySelector('input[name="medschooltype"]:checked').value;
+    var type2 = medschooltype === "2" ? 1 : 0;
+    var type3 = medschooltype === "3" ? 1 : 0;
+    var fellowship = document.getElementById("residencyhasfellowship").checked ? 1 : 0;
+    var doximity = parseFloat(document.getElementById("doximityCategory4").value);
+    var articles = parseFloat(document.getElementById("articlesAbstractsOtherthanP").value);
+    var presentations = parseFloat(document.getElementById("posterPresentations").value);
+
+    var logOdds = -1.736865 - 1.036516 * type2 - 0.7663027 * type3 + 1.51996 * fellowship
+                  + 0.539696 * doximity + 0.2918375 * articles + 0.0781833 * presentations;
+    var probability = 1 / (1 + Math.exp(-logOdds));
+
+    // Assuming the ROC curve is linear for demonstration; adjust according to your data
+    // var x = probability * 400; // Scale probability to SVG width
+    // var y = 400 - x; // Invert and scale for SVG height (assuming a straight line from bottom left to top right)
+    // var predictionPoint = document.getElementById("predictionPoint");
+    // predictionPoint.setAttribute("cx", x);
+    // predictionPoint.setAttribute("cy", y);
+    // predictionPoint.style.visibility = 'visible';
+
+    document.getElementById("result").innerText = "Predicted Probability of Match: " + probability.toFixed(4);
+}
+</script>
+</head>
+<body>
+<h1>REI Fellowship Match Probability Calculator</h1>
+<form>
+    <div class="row">
+        <label>Medical school:</label>
+        <div>
+            <label><input type="radio" name="medschooltype" value="1" checked>Allopathic U.S.</label>
+            <label><input type="radio" name="medschooltype" value="2">Osteopathic U.S.</label>
+            <label><input type="radio" name="medschooltype" value="3">International</label>
+        </div>
+   
+    </div>
+    <div class="row">
+        <label for="doximityCategory4">Residency program:</label>
+            <select id="doximityCategory4">
+                <option value="" disabled selected>Select</option>
+                <option value="4">AL - University of Alabama Medical Center</option>
+                <option value="1">AL - University of South Alabama College of Medicine/USA Health</option>
+                <option value="2">AR - University of Arkansas for Medical Sciences (UAMS) College of Medicine</option>
+                <option value="1">AZ - Creighton University School of Medicine (Phoenix)</option>
+                <option value="3">AZ - University of Arizona College of Medicine-Phoenix</option>
+                <option value="1">AZ - University of Arizona College of Medicine-Tucson</option>
+                <option value="1">CA - Adventist Health White Memorial</option>
+                <option value="1">CA - Arrowhead Regional Medical Center</option>
+                <option value="3">CA - Cedars-Sinai Medical Center</option>
+                <option value="1">CA - HCA Healthcare Riverside</option>
+                <option value="2">CA - Kaiser Permanente Northern California (Oakland)</option>
+                <option value="3">CA - Kaiser Permanente Northern California (San Francisco)</option>
+                <option value="3">CA - Kaiser Permanente Northern California (Santa Clara)</option>
+                <option value="1">CA - Kaiser Permanente Southern California (Los Angeles)</option>
+                <option value="1">CA - Kern Medical Center</option>
+                <option value="1">CA - Loma Linda University Health Education Consortium</option>
+                <option value="3">CA - Los Angeles County-Harbor-UCLA Medical Center</option>
+                <option value="1">CA - Marian Regional Medical Center</option>
+                <option value="2">CA - Naval Medical Center (San Diego)</option>
+                <option value="1">CA - Santa Clara Valley Medical Center</option>
+                <option value="4">CA - Stanford Health Care-Sponsored Stanford University</option>
+                <option value="4">CA - UCLA David Geffen School of Medicine/UCLA Medical Center</option>
+                <option value="4">CA - University of California (Irvine)</option>
+                <option value="4">CA - University of California (San Diego) Medical Center</option>
+                <option value="4">CA - University of California (San Francisco)</option>
+                <option value="1">CA - University of California (San Francisco)/Fresno</option>
+                <option value="4">CA - University of California Davis Health</option>
+                <option value="4">CA - University of Southern California/LAC+USC Medical Center</option>
+                <option value="1">CO - Swedish Medical Center</option>
+                <option value="4">CO - University of Colorado</option>
+                <option value="2">CT - Bridgeport Hospital/Yale University</option>
+                <option value="1">CT - Danbury Hospital</option>
+                <option value="1">CT - St Francis Hospital and Medical Center</option>
+                <option value="1">CT - Stamford Hospital/Columbia University College of Physicians and Surgeons</option>
+                <option value="2">CT - University of Connecticut</option>
+                <option value="4">CT - Yale-New Haven Medical Center</option>
+                <option value="3">DC - George Washington University</option>
+                <option value="2">DC - Howard University</option>
+                <option value="3">DC - MedStar Health/Washington Hospital Center</option>
+                <option value="2">DC - National Capital Consortium</option>
+                <option value="3">DE - Christiana Care Health Services</option>
+                <option value="1">FL - Bayfront Health St Petersburg</option>
+                <option value="1">FL - HCA Healthcare: East Florida Division GME</option>
+                <option value="1">FL - HCA Healthcare/USF Morsani College of Medicine GME: Brandon Regional Hospital</option>
+                <option value="1">FL - Memorial Healthcare System, Hollywood, Florida</option>
+                <option value="1">FL - Mount Sinai Medical Center of Florida, Inc</option>
+                <option value="3">FL - Orlando Health</option>
+                <option value="1">FL - University of Central Florida/HCA Healthcare GME (Gainesville)</option>
+                <option value="1">FL - University of Central Florida/HCA Healthcare GME (Greater Orlando)</option>
+                <option value="1">FL - University of Central Florida/HCA Healthcare GME (Pensacola)</option>
+                <option value="4">FL - University of Florida</option>
+                <option value="1">FL - University of Florida (Pensacola)</option>
+                <option value="3">FL - University of Florida College of Medicine Jacksonville</option>
+                <option value="2">FL - University of Miami/Jackson Health System</option>
+                <option value="4">FL - University of South Florida Morsani</option>
+                <option value="1">GA - Atrium Health Navicent The Medical Center/Mercer University School of Medicine</option>
+                <option value="4">GA - Emory University School of Medicine</option>
+                <option value="1">GA - HCA Healthcare/Mercer University School of Medicine</option>
+                <option value="1">GA - HCA Healthcare/Mercer University School of Medicine/Memorial Health University Medical Center</option>
+                <option value="1">GA - Medical College of Georgia</option>
+                <option value="1">GA - Morehouse School of Medicine</option>
+                <option value="1">GA - Northeast Georgia Medical Center</option>
+                <option value="1">GA - Wellstar Health System/Wellstar Atlanta Medical Center</option>
+                <option value="1">HI - Tripler Army Medical Center</option>
+                <option value="2">HI - University of Hawaii</option>
+                <option value="3">IA - University of Iowa Hospitals and Clinics</option>
+                <option value="1">IL - Advocate Health Care/Advocate Illinois Masonic Medical Center</option>
+                <option value="3">IL - Advocate Health Care/Advocate Lutheran General Hospital</option>
+                <option value="1">IL - Ascension Illinois/Saint Alexius</option>
+                <option value="1">IL - Ascension Illinois/Saint Joseph (Chicago)</option>
+                <option value="1">IL - Carle Foundation Hospital</option>
+                <option value="3">IL - Loyola University Medical Center</option>
+                <option value="4">IL - McGaw Medical Center of Northwestern University</option>
+                <option value="1">IL - Mount Sinai Hospital Medical Center of Chicago</option>
+                <option value="3">IL - Rush University Medical Center</option>
+                <option value="1">IL - Southern Illinois University</option>
+                <option value="4">IL - University of Chicago</option>
+                <option value="3">IL - University of Illinois College of Medicine at Chicago</option>
+                <option value="1">IL - University of Illinois College of Medicine at Peoria</option>
+                <option value="1">IN - Ascension St Vincent Hospital Indianapolis</option>
+                <option value="2">IN - Indiana University School of Medicine</option>
+                <option value="1">KS - HCA Healthcare Kansas City/Overland Park Regional Medical Center</option>
+                <option value="1">KS - University of Kansas (Wichita)</option>
+                <option value="2">KS - University of Kansas School of Medicine</option>
+                <option value="1">KY - Saint Joseph Hospital</option>
+                <option value="2">KY - University of Kentucky College of Medicine</option>
+                <option value="1">KY - University of Kentucky College of Medicine (Bowling Green)</option>
+                <option value="1">KY - University of Louisville School of Medicine</option>
+                <option value="2">LA - Louisiana State University (Shreveport)</option>
+                <option value="3">LA - Louisiana State University School of Medicine</option>
+                <option value="1">LA - Louisiana State University School of Medicine (Baton Rouge)</option>
+                <option value="1">LA - Ochsner Clinic Foundation</option>
+                <option value="2">LA - Tulane University</option>
+                <option value="4">MA - Beth Israel Deaconess Medical Center</option>
+                <option value="3">MA - Boston University Medical Center</option>
+                <option value="4">MA - Brigham and Women's Hospital/Massachusetts General Hospital</option>
+                <option value="4">MA - Tufts Medical Center</option>
+                <option value="1">MA - UMMS-Baystate</option>
+                <option value="2">MA - University of Massachusetts</option>
+                <option value="1">MD - Anne Arundel Medical Center</option>
+                <option value="4">MD - Johns Hopkins University</option>
+                <option value="1">MD - Sinai Hospital of Baltimore</option>
+                <option value="2">MD - University of Maryland</option>
+                <option value="2">ME - Maine Medical Center</option>
+                <option value="1">MI - Ascension Genesys Hospital</option>
+                <option value="1">MI - Ascension Macomb-Oakland Hospital</option>
+                <option value="1">MI - Ascension St John Hospital</option>
+                <option value="1">MI - Beaumont Health (Dearborn)</option>
+                <option value="2">MI - Beaumont Health (Farmington Hills)</option>
+                <option value="4">MI - Beaumont Health (Royal Oak)</option>
+                <option value="1">MI - Beaumont Health (Trenton)</option>
+                <option value="1">MI - Central Michigan University College of Medicine</option>
+                <option value="2">MI - Detroit Medical Center/Wayne State University</option>
+                <option value="1">MI - Garden City Hospital</option>
+                <option value="1">MI - Henry Ford Health/Henry Ford Macomb Hospital</option>
+                <option value="1">MI - Henry Ford Health/Henry Ford Wyandotte Hospital</option>
+                <option value="2">MI - Henry Ford Hospital/Wayne State University</option>
+                <option value="1">MI - Hurley Medical Center/Michigan State University</option>
+                <option value="1">MI - McLaren Health Care/Greater Lansing/MSU</option>
+                <option value="1">MI - McLaren Health Care/Macomb/MSU</option>
+                <option value="1">MI - Metro Health University of Michigan Health (Metro Health)</option>
+                <option value="1">MI - Sparrow Hospital/Michigan State University</option>
+                <option value="2">MI - Spectrum Health/Michigan State University</option>
+                <option value="2">MI - St Joseph Mercy Ann Arbor</option>
+                <option value="1">MI - St Joseph Mercy-Oakland</option>
+                <option value="1">MI - Trinity Health Muskegon</option>
+                <option value="4">MI - University of Michigan Health System</option>
+                <option value="1">MI - Western Michigan University Homer Stryker MD School of Medicine</option>
+                <option value="4">MN - Mayo Clinic College of Medicine and Science (Rochester)</option>
+                <option value="2">MN - University of Minnesota</option>
+                <option value="1">MO - Mercy Hospital (St Louis)</option>
+                <option value="3">MO - St Louis University School of Medicine</option>
+                <option value="2">MO - University of Missouri-Columbia</option>
+                <option value="1">MO - University of Missouri-Kansas City School of Medicine</option>
+                <option value="4">MO - Washington University/B-JH/SLCH Consortium</option>
+                <option value="2">MS - University of Mississippi Medical Center</option>
+                <option value="1">NC - Campbell University</option>
+                <option value="3">NC - Carolinas Medical Center</option>
+                <option value="4">NC - Duke University Hospital</option>
+                <option value="3">NC - Mountain Area Health Education Center</option>
+                <option value="1">NC - Novant Health New Hanover Regional Medical Center</option>
+                <option value="4">NC - University of North Carolina Hospitals</option>
+                <option value="3">NC - Vidant Medical Center/East Carolina University</option>
+                <option value="4">NC - Wake Forest University Baptist Medical Center</option>
+                <option value="1">NC - Womack Army Medical Center</option>
+                <option value="1">NE - Creighton University School of Medicine (Omaha)</option>
+                <option value="1">NE - University of Nebraska Medical Center College of Medicine</option>
+                <option value="2">NH - Dartmouth-Hitchcock/Mary Hitchcock Memorial Hospital</option>
+                <option value="2">NJ - Atlantic Health System/Morristown Medical Center</option>
+                <option value="1">NJ - Cooper Medical School of Rowan University/Cooper University Hospital</option>
+                <option value="1">NJ - Hackensack University Medical Center</option>
+                <option value="1">NJ - Inspira Health Network/Inspira Medical Center Vineland</option>
+                <option value="1">NJ - Jefferson Health New Jersey</option>
+                <option value="1">NJ - Jersey Shore University Medical Center</option>
+                <option value="3">NJ - Rutgers Health/Cooperman Barnabas Medical Center</option>
+                <option value="1">NJ - Rutgers Health/Jersey City Medical Center</option>
+                <option value="2">NJ - Rutgers Health/Monmouth Medical Center</option>
+                <option value="3">NJ - Rutgers Health/New Jersey Medical School</option>
+                <option value="2">NJ - Rutgers Health/Newark Beth Israel Medical Center</option>
+                <option value="3">NJ - Rutgers Health/Robert Wood Johnson Medical School</option>
+                <option value="3">NJ - Saint Peter's University Hospital/Rutgers Robert Wood Johnson Medical School</option>
+                <option value="1">NJ - Virtua</option>
+                <option value="3">NM - University of New Mexico School of Medicine</option>
+                <option value="1">NV - HCA Healthcare Sunrise Health Graduate Medical Education</option>
+                <option value="1">NV - Kirk Kerkorian School of Medicine at UNLV</option>
+                <option value="1">NY - Albany Medical Center</option>
+                <option value="1">NY - Bronx</option>
+                <option value="1">NY - BronxCare Health System</option>
+                <option value="1">NY - Brooklyn Hospital Center</option>
+                <option value="1">NY - Flushing Hospital Medical Center</option>
+                <option value="1">NY - Good Samaritan Hospital Medical Center</option>
+                <option value="4">NY - Icahn School of Medicine at Mount Sinai/Mount Sinai Hospital</option>
+                <option value="1">NY - Icahn School of Medicine at Mount Sinai/NYC Health and Hospitals (Queens)</option>
+                <option value="3">NY - Icahn School of Medicine at Mount Sinai/South Nassau</option>
+                <option value="3">NY - Icahn School of Medicine at Mount Sinai/West</option>
+                <option value="1">NY - Jamaica Hospital Medical Center</option>
+                <option value="1">NY - Lincoln Medical and Mental Health Center</option>
+                <option value="2">NY - Maimonides Medical Center</option>
+                <option value="4">NY - Montefiore Medical Center/Albert Einstein College of Medicine</option>
+                <option value="1">NY - Nassau University Medical Center</option>
+                <option value="2">NY - New York Medical College at Westchester Medical Center</option>
+                <option value="4">NY - New York Presbyterian Hospital (Columbia Campus)</option>
+                <option value="4">NY - New York Presbyterian Hospital (Cornell Campus)</option>
+                <option value="2">NY - New York-Presbyterian Brooklyn Methodist Hospital</option>
+                <option value="1">NY - NYC Health & Hospitals/South Brooklyn Health</option>
+                <option value="4">NY - NYU Grossman School of Medicine</option>
+                <option value="3">NY - NYU Long Island School of Medicine</option>
+                <option value="1">NY - Richmond University Medical Center</option>
+                <option value="1">NY - Rochester General Hospital</option>
+                <option value="1">NY - St John's Episcopal Hospital-South Shore</option>
+                <option value="3">NY - Stony Brook Medicine/University Hospital</option>
+                <option value="3">NY - SUNY Downstate Health Sciences University</option>
+                <option value="2">NY - SUNY Upstate Medical University</option>
+                <option value="1">NY - University at Buffalo</option>
+                <option value="1">NY - University at Buffalo (Sisters of Charity)</option>
+                <option value="3">NY - University of Rochester</option>
+                <option value="1">NY - Wyckoff Heights Medical Center</option>
+                <option value="4">NY - Zucker School of Medicine at Hofstra/Northwell</option>
+                <option value="4">NY - Zucker School of Medicine at Hofstra/Northwell at Lenox Hill Hospital</option>
+                <option value="4">NY - Zucker School of Medicine at Hofstra/Northwell at South Shore University Hospital</option>
+                <option value="4">NY - Zucker School of Medicine at Hofstra/Northwell at Staten Island University Hospital</option>
+                <option value="2">OH - Akron General Medical Center/NEOMED</option>
+                <option value="1">OH - Aultman Hospital/NEOMED</option>
+                <option value="3">OH - Case Western Reserve University/University Hospitals Cleveland Medical Center</option>
+                <option value="4">OH - Cleveland Clinic Foundation</option>
+                <option value="1">OH - Kettering Health Network</option>
+                <option value="1">OH - Mercy St Vincent Medical Center</option>
+                <option value="4">OH - Ohio State University/Mt Carmel Hospital</option>
+                <option value="1">OH - OhioHealth/Doctors Hospital</option>
+                <option value="2">OH - OhioHealth/Riverside Methodist Hospital</option>
+                <option value="1">OH - Summa Health System/NEOMED</option>
+                <option value="3">OH - The MetroHealth System/Case Western Reserve University</option>
+                <option value="2">OH - TriHealth (Bethesda North and Good Samaritan Hospitals)</option>
+                <option value="3">OH - University of Cincinnati Medical Center/College of Medicine</option>
+                <option value="1">OH - University of Toledo</option>
+                <option value="3">OH - Wright State University</option>
+                <option value="2">OK - Oklahoma State University Center for Health Sciences</option>
+                <option value="2">OK - Osteopathic Medical Education Consortium of Oklahoma, Inc. (OMECO)/Oklahoma State University</option>
+                <option value="1">OK - St Anthony Hospital</option>
+                <option value="3">OK - University of Oklahoma Health Sciences Center</option>
+                <option value="1">OK - University of Oklahoma School of Community Medicine (Tulsa)</option>
+                <option value="3">OR - Oregon Health & Science University</option>
+                <option value="4">PA - Abington Memorial Hospital</option>
+                <option value="1">PA - Albert Einstein Healthcare Network</option>
+                <option value="2">PA - Allegheny Health Network Medical Education Consortium (WPH)</option>
+                <option value="1">PA - Crozier-Chester Medical Center</option>
+                <option value="3">PA - Geisinger Health System</option>
+                <option value="4">PA - Hospital of the University of Pennsylvania</option>
+                <option value="3">PA - Lehigh Valley Health Network</option>
+                <option value="1">PA - Main Line Health System/Lankenau Medical Center</option>
+                <option value="1">PA - Penn State Milton S Hershey Medical Center</option>
+                <option value="4">PA - Pennsylvania Hospital of the University of Pennsylvania Health System</option>
+                <option value="3">PA - Sidney Kimmel Medical College at Thomas Jefferson University/TJUH</option>
+                <option value="1">PA - St Joseph's University Medical Center</option>
+                <option value="2">PA - St Luke's University Hospital</option>
+                <option value="2">PA - Temple University Hospital</option>
+                <option value="1">PA - Tower Health/Phoenixville Hospital</option>
+                <option value="2">PA - Tower Health/Reading Hospital</option>
+                <option value="4">PA - UPMC Medical Education</option>
+                <option value="1">PA - UPMC Medical Education (Harrisburg)</option>
+                <option value="1">PA - Wellspan Health/York Hospital</option>
+                <option value="1">PR - Hospital Episcopal San Lucas/Ponce School of Medicine</option>
+                <option value="1">PR - San Juan City Hospital</option>
+                <option value="1">PR - University of Puerto Rico</option>
+                <option value="4">RI - Women and Infants Hospital of Rhode Island/Brown University</option>
+                <option value="4">SC - Medical University of South Carolina</option>
+                <option value="1">SC - Prisma Health/University of South Carolina SOM Columbia (Columbia)</option>
+                <option value="2">SC - Prisma Health/University of South Carolina SOM Greenville (Greenville)</option>
+                <option value="1">TN - Baptist Memorial Medical Education</option>
+                <option value="1">TN - East Tennessee State University/Quillen College of Medicine</option>
+                <option value="1">TN - Meharry Medical College</option>
+                <option value="2">TN - University of Tennessee</option>
+                <option value="1">TN - University of Tennessee College of Medicine (Nashville)</option>
+                <option value="1">TN - University of Tennessee College of Medicine at Chattanooga</option>
+                <option value="2">TN - University of Tennessee Medical Center at Knoxville</option>
+                <option value="4">TN - Vanderbilt University Medical Center</option>
+                <option value="1">TX - Baylor All Saints Medical Center Fort Worth</option>
+                <option value="4">TX - Baylor College of Medicine</option>
+                <option value="2">TX - Baylor University Medical Center</option>
+                <option value="1">TX - HCA Healthcare Las Palmas Del Sol</option>
+                <option value="1">TX - HCA Houston Healthcare (West)/University of Houston</option>
+                <option value="1">TX - HCA Medical City Healthcare UNT-TCU Graduate Medical Education</option>
+                <option value="1">TX - John Peter Smith Hospital (Tarrant County Hospital District)</option>
+                <option value="1">TX - Methodist Health System Dallas</option>
+                <option value="1">TX - Methodist Hospital (Houston)</option>
+                <option value="1">TX - San Antonio Uniformed Services Health Education Consortium</option>
+                <option value="1">TX - St. David's Healthcare Graduate Medical Education</option>
+                <option value="3">TX - Texas A&M College of Medicine-Scott and White Medical Center (Temple)</option>
+                <option value="1">TX - Texas Tech University (Amarillo)</option>
+                <option value="1">TX - Texas Tech University (Permian Basin)</option>
+                <option value="1">TX - Texas Tech University Health Sciences Center at Lubbock</option>
+                <option value="1">TX - Texas Tech University HSC El Paso</option>
+                <option value="1">TX - Texas Tech University HSC El Paso</option>
+                <option value="3">TX - University of Texas at Austin Dell Medical School</option>
+                <option value="3">TX - University of Texas Health Science Center at Houston</option>
+                <option value="3">TX - University of Texas Health Science Center San Antonio Joe and Teresa Lozano Long School of Medicine</option>
+                <option value="3">TX - University of Texas Medical Branch Hospitals</option>
+                <option value="2">TX - University of Texas RGV (DHR)</option>
+                <option value="4">TX - University of Texas Southwestern Medical Center</option>
+                <option value="4">UT - University of Utah Health</option>
+                <option value="3">VA - Carilion Clinic-Virginia Tech Carilion School of Medicine</option>
+                <option value="3">VA - Eastern Virginia Medical School</option>
+                <option value="2">VA - Inova Fairfax Medical Campus</option>
+                <option value="2">VA - Naval Medical Center (Portsmouth)</option>
+                <option value="1">VA - Riverside Regional Medical Center</option>
+                <option value="4">VA - University of Virginia Medical Center</option>
+                <option value="4">VA - Virginia Commonwealth University Health System</option>
+                <option value="3">VT - University of Vermont Medical Center</option>
+                <option value="1">WA - Madigan Army Medical Center</option>
+                <option value="4">WA - University of Washington</option>
+                <option value="1">WI - Aurora Health Care</option>
+                <option value="2">WI - Medical College of Wisconsin Affiliated Hospitals</option>
+                <option value="3">WI - University of Wisconsin Hospitals and Clinics</option>
+                <option value="1">WV - Charleston Area Medical Center/CAMC Institute for Academic Medicine</option>
+                <option value="1">WV - Marshall University School of Medicine</option>
+                <option value="1">WV - West Virginia University</option>
+                <option value="1">Other - International or Not Listed</option>
+          
+        </select>
+    </div>
+    <div class="row">
+        <label>Residency has an affiliated REI fellowship:</label>
+        <input type="checkbox" id="residencyhasfellowship">
+    </div>    
+    <div class="row">
+        <label>Projects in progress / unpublished articles or abstracts (#):</label>
+        <input type="number" id="articlesAbstractsOtherthanP" step="1" min="0">
+    </div>
+    <div class="row">
+        <label>Poster presentations at national or regional meetings (#):</label>
+        <input type="number" id="posterPresentations" step="1" min="0">
+    </div>
+    <button type="button" onclick="calculateProbability()">Calculate Probability</button>
+</form>
+<p id="result"></p>
+<!-- <svg id="rocCurve" width="400" height="400" style="border: 1px solid black;">
+    <polyline points="0,400 100,300 200,200 300,100 400,0" fill="none" stroke="black" />
+    <circle id="predictionPoint" cx="0" cy="0" r="5" fill="red" style="visibility: hidden;" />
+</svg> -->
+</body>
+</html>

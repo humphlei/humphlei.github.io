@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>REI Fellowship Match Probability Calculator</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+        background-color: #f4f4f9;
+        color: #333;
+    }
+    h1 {
+        color: #0056b3;
+    }
+    form {
+        background: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    .row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #ccc;
+    padding: 10px 0;
+    }
+
+    .row label {
+        flex-basis: 40%; /* Adjust based on your preference */
+    }
+
+    .row div, .row input[type="number"], .row input[type="checkbox"] {
+        flex-basis: 60%; /* Adjust based on your preference */
+    }
+
+    .row:last-child {
+        border-bottom: none;
+    }
+    label {
+        display: block;
+        margin-bottom: 10px;
+    }
+    input[type="number"], input[type="radio"], input[type="checkbox"] {
+        margin-top: 5px;
+        margin-right: 5px;
+    }
+    select, input[type="number"] {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+    button {
+        background-color: #0056b3;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 16px;
+    }
+    button:hover {
+        background-color: #004494;
+    }
+    #result {
+        margin-top: 20px;
+        padding: 10px;
+        background-color: #e2eaff;
+        border-left: 5px solid #0056b3;
+        font-size: 16px;
+    }
+</style>
+<script>
+function calculateProbability() {
+    var medschooltype = document.querySelector('input[name="medschooltype"]:checked').value;
+    var type2 = medschooltype === "2" ? 1 : 0;
+    var type3 = medschooltype === "3" ? 1 : 0;
+    var fellowship = document.getElementById("residencyhasfellowship").checked ? 1 : 0;
+    var doximity = parseFloat(document.getElementById("doximityCategory4").value);
+    var articles = parseFloat(document.getElementById("articlesAbstractsOtherthanP").value);
+    var presentations = parseFloat(document.getElementById("posterPresentations").value);
+
+    var logOdds = -1.736865 - 1.036516 * type2 - 0.7663027 * type3 + 1.51996 * fellowship
+                  + 0.539696 * doximity + 0.2918375 * articles + 0.0781833 * presentations;
+    var probability = 1 / (1 + Math.exp(-logOdds));
+
+    // Assuming the ROC curve is linear for demonstration; adjust according to your data
+    var x = probability * 400; // Scale probability to SVG width
+    var y = 400 - x; // Invert and scale for SVG height (assuming a straight line from bottom left to top right)
+    var predictionPoint = document.getElementById("predictionPoint");
+    predictionPoint.setAttribute("cx", x);
+    predictionPoint.setAttribute("cy", y);
+    predictionPoint.style.visibility = 'visible';
+
+    document.getElementById("result").innerText = "Predicted Probability of Match: " + probability.toFixed(4);
+}
+</script>
+</head>
+<body>
+<h1>REI Fellowship Match Probability Calculator</h1>
+<form>
+    <div class="row">
+        <label>Medical School:</label>
+        <div>
+            <label><input type="radio" name="medschooltype" value="1" checked>Allopathic U.S.</label>
+            <label><input type="radio" name="medschooltype" value="2">Osteopathic U.S.</label>
+            <label><input type="radio" name="medschooltype" value="3">International</label>
+        </div>
+    </div>
+    <div class="row">
+        <label>Residency has REI Fellowship:</label>
+        <input type="checkbox" id="residencyhasfellowship">
+    </div>
+    <div class="row">
+        <label>Doximity Category 4 (Enter value):</label>
+        <input type="number" id="doximityCategory4" step="0.01" min="0">
+    </div>
+    <div class="row">
+        <label>Articles/Abstracts Other than Posters (Enter value):</label>
+        <input type="number" id="articlesAbstractsOtherthanP" step="0.01" min="0">
+    </div>
+    <div class="row">
+        <label>Number of Poster Presentations (Enter value):</label>
+        <input type="number" id="posterPresentations" step="0.01" min="0">
+    </div>
+    <button type="button" onclick="calculateProbability()">Calculate Probability</button>
+</form>
+<p id="result"></p>
+<svg id="rocCurve" width="400" height="400" style="border: 1px solid black;">
+    <!-- Sample ROC Curve (You'll need to replace this with your actual curve data) -->
+    <polyline points="0,400 100,300 200,200 300,100 400,0" fill="none" stroke="black" />
+    <!-- Placeholder for prediction point -->
+    <circle id="predictionPoint" cx="0" cy="0" r="5" fill="red" style="visibility: hidden;" />
+</svg>
+</body>
+</html>
