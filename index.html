@@ -463,8 +463,12 @@ canvas {
             <label>Residency has an affiliated REI fellowship:</label>
             <input type="checkbox" id="residencyhasfellowship">
         </div>    
+        <div class="row-inline">
+            <label>At least one first-author manuscript in peer-reviewed journal:</label>
+            <input type="checkbox" id="firstauthor">
+        </div>
         <div class="row">
-            <label>Projects in progress / unpublished articles or abstracts (#):</label>
+            <label>Research projects in progress / unpublished abstracts or articles (#):</label>
             <input type="number" id="articlesAbstractsOtherthanP" step="1" min="0">
         </div>
         <div class="row">
@@ -766,7 +770,7 @@ document.addEventListener('DOMContentLoaded', function () {
             plugins: {
                 title: {
                     display: true,
-                    text: 'Matched applicants: Predicted probability distribution (n=197)',
+                    text: 'Matched applicants: Predicted probability distribution (n=199)',
                     font: {
                         size: 14
                     }
@@ -798,7 +802,7 @@ document.addEventListener('DOMContentLoaded', function () {
             plugins: {
                 title: {
                     display: true,
-                    text: 'Unmatched applicants: Predicted probability distribution (n=89)',
+                    text: 'Unmatched applicants: Predicted probability distribution (n=87)',
                     font: {
                         size: 14
                     }
@@ -814,12 +818,14 @@ function calculateProbability() {
     var type2 = medschooltype === "2" ? 1 : 0;
     var type3 = medschooltype === "3" ? 1 : 0;
     var fellowship = document.getElementById("residencyhasfellowship").checked ? 1 : 0;
+    var firstAuthor = document.getElementById("firstauthor").checked ? 1 : 0;
     var doximity = parseFloat(document.getElementById("doximityCategory4").value);
     var articles = parseFloat(document.getElementById("articlesAbstractsOtherthanP").value);
     var presentations = parseFloat(document.getElementById("posterPresentations").value);
 
-    var logOdds = -1.736865 - 1.036516 * type2 - 0.7663027 * type3 + 1.51996 * fellowship
-                  + 0.539696 * doximity + 0.2918375 * articles + 0.0781833 * presentations;
+    var logOdds = -2.183783 - 1.012403 * type2 - 0.9373608 * type3 + 1.515319 * fellowship
+                  + 0.6006193 * doximity + 0.7174076 * firstAuthor + 0.2538096 * articles
+                  + 0.0731652 * presentations;
     var probability = 1 / (1 + Math.exp(-logOdds));
     var percentProbability = (probability * 100).toFixed(2); // Convert probability to percentage
 
@@ -827,10 +833,10 @@ function calculateProbability() {
 
     // Update result text with condition
     var resultText = `<strong>Predicted Probability of Match:</strong> <span class="tooltip">${percentProbability}%<span class="tooltiptext">${tooltipText}</span></span><br><br>`; // Added <br><br> for spacing and <strong> for bold
-    if (parseFloat(percentProbability) < 83.0) {
-        resultText += "This value is below the optimal cutoff of 83.0% for predicting a successful match.";
+    if (parseFloat(percentProbability) < 78.04) {
+        resultText += "This value is below the optimal cutoff of 78.04% for predicting a successful match.";
     } else {
-        resultText += "This value is above the optimal cutoff of 83.0% for predicting a successful match.";
+        resultText += "This value is above the optimal cutoff of 78.04% for predicting a successful match.";
     }
 
     document.getElementById("result").innerHTML = resultText;
@@ -838,6 +844,7 @@ function calculateProbability() {
     // Update charts with the calculated probability percentage
     updateCharts(percentProbability);
 }
+
 
 
 
@@ -871,12 +878,12 @@ function updateCharts(probabilityPercent) {
     // Define annotation for the optimal score line at 83.0%
     const optimalScoreAnnotation = {
         type: 'line',
-        xMin: 16, // This corresponds to the 80-85% bin
-        xMax: 16,
+        xMin: 15, // This corresponds to the 75-80% bin
+        xMax: 15,
         borderColor: 'green', // Changed to blue
         borderDash: [6, 6], // Keeping it dotted for the optimal score line
         label: {
-            content: 'Optimal score: 83.0%',
+            content: 'Optimal score: 78.04%',
             enabled: true,
             position: "end",
             yAdjust: -120, // Move the label up
