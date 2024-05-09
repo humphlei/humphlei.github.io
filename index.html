@@ -25,6 +25,18 @@
         max-width: 600px;
         margin: 20px auto;
     }
+        .info-box {
+            background-color: #f9f9f9;
+            border: 1px solid #ccc;
+            padding: 15px;
+            margin: 20px auto;
+            max-width: 600px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            font-size: 14px;
+            line-height: 1.5;
+            text-align: left;
+        }
     .row {
         margin-bottom: 15px;
     }
@@ -147,6 +159,10 @@ canvas {
 </head>
 <body>
 <h1>REI Fellowship Match Probability Calculator</h1>
+<div class="info-box">
+    The prediction model is based on REI applications submitted to the University of Pennsylvania in 2019, 2021, 2022, and 2023, representing 99% of the total applications reported by the National Resident Matching Program (NRMP) during the study period.<br><br>
+    At the cutoff of 78.04%, the model correctly classified >75% of applicants, with sensitivity 69.4%, specificity 89.7%, positive predictive value 93.9%, and negative predictive value 56.1%. See full article by Humphries et al: Predicting a successful match among applicants to reproductive endocrinology and infertility fellowship.
+</div>
 <form>
     <div class="row">
         <label>Medical school:</label>
