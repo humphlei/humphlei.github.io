@@ -160,8 +160,8 @@ canvas {
 <body>
 <h1>REI Fellowship Match Probability Calculator</h1>
 <div class="info-box">
-    The prediction model is based on REI applications submitted to the University of Pennsylvania in 2019, 2021, 2022, and 2023, representing 99% of the total applications reported by the National Resident Matching Program (NRMP) during the study period.<br><br>
-    At the cutoff of 78.04%, the model correctly classified >75% of applicants, with sensitivity 69.4%, specificity 89.7%, positive predictive value 93.9%, and negative predictive value 56.1%. See full article by Humphries et al: Predicting a successful match among applicants to reproductive endocrinology and infertility fellowship.
+    The prediction model is based on data from REI applications submitted to the University of Pennsylvania in 2019, 2021, 2022, and 2023, representing 99% of the total number of applications submitted to the National Resident Matching Program (NRMP) in these years.<br><br>
+    Source: Humphries et al, Predicting a successful match among applicants to reproductive endocrinology and infertility fellowship.
 </div>
 <form>
     <div class="row">
@@ -847,20 +847,24 @@ function calculateProbability() {
 
     var tooltipText = "This probability is based on items in the written Electronic Residency Application Service (ERAS®) application and does not account for information in the personal statement, letters of recommendation, interview performance, in-person evaluation, or other parameters not listed below.<br><br>The following variables were evaluated as potential predictors: age, sex, race, ethnicity, citizenship/work authorization, medical school type, region of U.S. medical school, additional advanced degree, USMLE Step scores, CREOG scores, region of U.S. residency, residency ranking, residency affiliation with an REI fellowship, number of research/work/volunteer experiences, number of first-author publications, total articles published, unpublished articles/abstracts, book chapters, oral and poster presentations, and online publications.";
 
-    // Update result text with condition
-    var resultText = `<strong>Predicted Probability of Match:</strong> <span class="tooltip">${percentProbability}%<span class="tooltiptext">${tooltipText}</span></span><br><br>`; // Added <br><br> for spacing and <strong> for bold
-    if (parseFloat(percentProbability) < 78.04) {
-        resultText += "This value is below the optimal cutoff of 78.04% for predicting a successful match.";
-    } else {
-        resultText += "This value is above the optimal cutoff of 78.04% for predicting a successful match.";
-    }
+    // Update result text with conditions
+var resultText = `<strong>Predicted Probability of Match:</strong> <span class="tooltip">${percentProbability}%<span class="tooltiptext">${tooltipText}</span></span><br><br>`; // Added <br><br> for spacing and <strong> for bold
 
-    document.getElementById("result").innerHTML = resultText;
-
-    // Update charts with the calculated probability percentage
-    updateCharts(percentProbability);
+if (parseFloat(percentProbability) < 40) {
+    resultText += "Predicted probability of <40% indicates a low likelihood of match.<br><br> Using a 40% cutoff, the model exhibited high sensitivity (>90%) and a low false negative rate (<10%). Almost all of the applications that resulted in a successful match had a predicted probability of at least 40%.";
+} else if (parseFloat(percentProbability) >= 40 && parseFloat(percentProbability) < 70) {
+    resultText += "Predicted probability of <70% indicates a lower-than-average likelihood of a match.<br><br> Using a 70% cutoff, sensitivity and specificity of the model were both 75.9% (i.e. in most cases, the model correctly predicted the applicant's match result).";
+} else if (parseFloat(percentProbability) >= 70 && parseFloat(percentProbability) <= 80) {
+    resultText += "Predicted probability of >70% indicates a higher-than-average likelihood of match.<br><br> Using a 70% cutoff, sensitivity and specificity of the model were both 75.9% (i.e. in most cases, the model correctly predicted the applicant's match result).";
+} else {
+    resultText += "Predicted probability of >80% indicates a very high likelihood of match.<br><br> At this cutoff, the model exhibited high specificity (>90%) and a low false positive rate (<10%). Almost all of the applications with a predicted probability >80% resulted in a successful match."
 }
 
+document.getElementById("result").innerHTML = resultText;
+
+// Update charts with the calculated probability percentage
+updateCharts(percentProbability);
+}
 
 
 
@@ -891,15 +895,15 @@ function updateCharts(probabilityPercent) {
         }
     };
 
-    // Define annotation for the optimal score line at 83.0%
+    
     const optimalScoreAnnotation = {
         type: 'line',
-        xMin: 15, // This corresponds to the 75-80% bin
-        xMax: 15,
+        xMin: 14, // This corresponds to the 70-75% bin
+        xMax: 14,
         borderColor: 'green', // Changed to blue
         borderDash: [6, 6], // Keeping it dotted for the optimal score line
         label: {
-            content: 'Optimal score: 78.04%',
+            content: 'Average score: 70%',
             enabled: true,
             position: "end",
             yAdjust: -120, // Move the label up
@@ -909,6 +913,7 @@ function updateCharts(probabilityPercent) {
             }
         }
     };
+
 
     // Add tooltip for the optimal score line
     const tooltipText = "At cutoff 83.0% (by Youden index, the value with the optimal tradeoff between sensitivity and specificity): Sensitivity 71.57%, Specificity 83.15%, Positive predictive value 90.38%, Negative predictive value 56.92%";
