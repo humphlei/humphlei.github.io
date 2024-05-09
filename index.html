@@ -7,6 +7,19 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@1.0.2"></script>
 <style>
+    
+    .header {
+        background-color: #DDDDDD;
+        color: black;
+        padding: 4px;
+        font-size: 16px;
+        font-weight: bold;
+        text-align: left;
+        margin-top: 20px;
+        margin-bottom: 15px;
+        border-radius: 2px;
+    }
+
     body {
         font-family: 'Arial', sans-serif;
         background-color: #f4f4f9;
@@ -164,16 +177,17 @@ canvas {
     Source: Humphries et al, Predicting a successful match among applicants to reproductive endocrinology and infertility fellowship.
 </div>
 <form>
+    <div class="header">Medical School</div>
     <div class="row">
-        <label>Medical school:</label>
         <div>
             <input type="radio" name="medschooltype" value="1" checked> Allopathic U.S.
             <input type="radio" name="medschooltype" value="2"> Osteopathic U.S.
             <input type="radio" name="medschooltype" value="3"> International
         </div>
     </div>
+    <div class="header">Residency</div>
     <div class="row">
-        <label for="doximityCategory4">Residency program:</label>
+        <label for="doximityCategory4">Residency program (by state):</label>
         <select id="doximityCategory4">
             <option value="" disabled selected>Select</option>  
             <option value="4">AL - University of Alabama Medical Center</option>
@@ -478,13 +492,14 @@ canvas {
         <div class="row-inline">
             <label>Residency has an affiliated REI fellowship:</label>
             <input type="checkbox" id="residencyhasfellowship">
-        </div>    
+        </div>   
+        <div class="header">Research</div> 
         <div class="row-inline">
             <label>At least one first-author manuscript in peer-reviewed journal:</label>
             <input type="checkbox" id="firstauthor">
         </div>
         <div class="row">
-            <label>Research projects in progress / unpublished abstracts or articles (#):</label>
+            <label>Ongoing research projects / unpublished abstracts or articles (#):</label>
             <input type="number" id="articlesAbstractsOtherthanP" step="1" min="0">
         </div>
         <div class="row">
