@@ -7,49 +7,55 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@1.0.2"></script>
 <style>
-    
-    .header {
-        background-color: #DDDDDD;
-        color: black;
+    .header1, .header2 {
+        background-color: #DDDDDD; /* Light grey background */
+        color: #333; /* Dark grey text for better contrast */
         padding: 4px;
         font-size: 16px;
         font-weight: bold;
         text-align: left;
-        margin-top: 20px;
+        margin-top: 2px;
         margin-bottom: 15px;
         border-radius: 2px;
     }
 
     body {
         font-family: 'Arial', sans-serif;
-        background-color: #f4f4f9;
-        color: #333;
+        background-color: #f5f5f5; /* This sets the whole page's background color to a neutral light grey */
+        color: #333; /* Dark grey text */
         margin: 20px;
     }
+
     h1 {
-        color: #0056b3;
+        color: #a40000; /* Dark red color */
         text-align: center;
     }
+
     form {
-        background-color: #fff;
-        padding: 20px;
-        border-radius: 8px;
-        box-shadow: 0 2px 15px rgba(0,0,0,0.1);
-        max-width: 600px;
+        background-color: #ffffff; /* White background for form */
+        border: 1px solid #cccccc; /* Light grey border */
+        padding: 15px;
         margin: 20px auto;
+        width: 600px;
+        max-width: 600px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
-        .info-box {
-            background-color: #f9f9f9;
-            border: 1px solid #ccc;
-            padding: 15px;
-            margin: 20px auto;
-            max-width: 600px;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            font-size: 14px;
-            line-height: 1.5;
-            text-align: left;
-        }
+
+    .info-box {
+        background-color: #ffffff; /* White background for informational box */
+        border: 1px solid #cccccc;
+        padding: 15px;
+        margin: 20px auto;
+        width: 600px;
+        max-width: 600px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        font-size: 14px;
+        line-height: 1.5;
+        text-align: left;
+    }
+
     .row {
         margin-bottom: 15px;
     }
@@ -70,6 +76,7 @@
         flex: 1;
         margin-right: 10px; /* Adds some spacing between the label and the checkbox */
     }
+
     input[type="checkbox"] {
         width: 20px; /* Larger width for the checkbox */
         height: 20px; /* Larger height for the checkbox */
@@ -87,8 +94,9 @@
         border-radius: 4px;
         box-sizing: border-box;
     }
+
     button {
-        background-color: #0056b3;
+        background-color: #a40000; /* Dark red background for buttons */
         color: white;
         border: none;
         padding: 10px 15px;
@@ -96,88 +104,92 @@
         cursor: pointer;
         margin-top: 10px;
     }
+
     button:hover {
-        background-color: #004494;
+        background-color: #7a0000; /* Slightly darker red on hover */
     }
+
     #result {
         font-size: 16px;
-        background-color: #e2eaff;
-        border-left: 5px solid #0056b3;
+        background-color: rgba(164, 0, 0, 0.2);
+        border-left: 5px solid #a40000;
         padding: 10px;
-        margin-top: 20px;
+        width: 600px;
+        max-width: 600px;
+        margin: 20px auto;
     }
+
     .canvas-container {
-    width: 600px; /* Adjust this value based on the width of your form */
-    margin: auto;
-}
+        width: 600px;
+        background-color: #ffffff;
+        border: 1px solid #cccccc;
+        padding: 15px;
+        margin: 20px auto;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
 
-canvas {
-    width: 100% !important;
-    max-width: 600px; /* Ensures canvas does not grow beyond this width */
-    height: auto !important;
-}
-.tooltip {
-    position: relative;
-    cursor: pointer; /* Shows a pointer cursor on hover */
-}
+    canvas {
+        width: 100% !important;
+        max-width: 600px;
+        height: auto !important;
+    }
 
-.tooltip .tooltiptext {
-    visibility: hidden;
-    width: 300px; /* Adjust the width as needed */
-    background-color: #f8f9fa; /* Lighter background color */
-    color: #333; /* Darker text color */
-    text-align: left;
-    padding: 10px; /* Increase padding for better readability */
-    border-radius: 6px;
-    border: 1px solid #ccc; /* Adding a subtle border */
-    position: absolute;
-    z-index: 1;
-    bottom: 150%; /* Adjust the position as needed */
-    left: 50%;
-    transform: translateX(-50%);
-    opacity: 0;
-    transition: opacity 0.5s;
-    font-size: 12px; /* Smaller font size */
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* Optional: Adding a slight shadow for better visibility */
-}
+    .tooltip {
+        position: relative;
+        cursor: pointer;
+    }
 
-.tooltip:hover .tooltiptext {
-    visibility: visible;
-    opacity: 1;
-}
+    .tooltip .tooltiptext {
+        visibility: hidden;
+        width: 300px;
+        background-color: #f8f8f8; /* Light grey background for tooltips */
+        color: #333;
+        text-align: left;
+        padding: 10px;
+        border-radius: 6px;
+        border: 1px solid #ccc;
+        position: absolute;
+        z-index: 1;
+        bottom: 150%;
+        left: 50%;
+        transform: translateX(-50%);
+        opacity: 0;
+        transition: opacity 0.5s;
+        font-size: 12px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
 
-.tooltip {
-    display: inline-block; /* Ensures the tooltip text behaves like a text element */
-    border-bottom: 1px dotted #0056b3; /* Underline to indicate it's interactive */
-}
+    .tooltip:hover .tooltiptext {
+        visibility: visible;
+        opacity: 1;
+    }
 
-.tooltip:hover {
-    color: #0056b3; /* Change color on hover to signal interactivity */
-}
+    .tooltip:hover {
+        color: #0056b3; /* Change color on hover to signal interactivity */
+    }
 
-/* Optional: Style for an icon if you choose to add one */
-.tooltip-icon {
-    display: inline-block;
-    margin-left: 5px;
-    width: 16px;
-    height: 16px;
-    background-image: url('path_to_info_icon.png'); /* Path to an informational icon */
-    background-size: cover;
-    cursor: help;
-}
-
-
-
+    .tooltip-icon {
+        display: inline-block;
+        margin-left: 5px;
+        width: 16px;
+        height: 16px;
+        background-image: url('path_to_info_icon.png');
+        background-size: cover;
+        cursor: help;
+    }
 </style>
+
+
 </head>
 <body>
 <h1>REI Fellowship Match Probability Calculator</h1>
 <div class="info-box">
     The prediction model is based on data from REI applications submitted to the University of Pennsylvania in 2019, 2021, 2022, and 2023, representing 99% of the total number of applications submitted to the National Resident Matching Program (NRMP) in these years.<br><br>
-    Source: Humphries et al, Predicting a successful match among applicants to reproductive endocrinology and infertility fellowship.
+    <strong>Source: Humphries et al. Predicting a successful match among applicants to reproductive endocrinology and infertility fellowship.</strong>
 </div>
 <form>
-    <div class="header">Medical School</div>
+    <div class="header1">Medical School</div>
     <div class="row">
         <div>
             <input type="radio" name="medschooltype" value="1" checked> Allopathic U.S.
@@ -185,7 +197,7 @@ canvas {
             <input type="radio" name="medschooltype" value="3"> International
         </div>
     </div>
-    <div class="header">Residency</div>
+    <div class="header2">Residency</div>
     <div class="row">
         <label for="doximityCategory4">Residency program (by state):</label>
         <select id="doximityCategory4">
@@ -493,7 +505,7 @@ canvas {
             <label>Residency has an affiliated REI fellowship:</label>
             <input type="checkbox" id="residencyhasfellowship">
         </div>   
-        <div class="header">Research</div> 
+        <div class="header2">Research</div> 
         <div class="row-inline">
             <label>At least one first-author manuscript in peer-reviewed journal:</label>
             <input type="checkbox" id="firstauthor">
@@ -786,8 +798,8 @@ document.addEventListener('DOMContentLoaded', function () {
             datasets: [{
                 label: 'Matched',
                 data: matchCounts,
-                backgroundColor: 'rgba(54, 162, 235, 0.6)',
-                borderColor: 'rgba(54, 162, 235, 1)',
+                backgroundColor: '#3f94b9',
+                borderColor: '#286973',
                 borderWidth: 1
             }]
         },
@@ -818,8 +830,8 @@ document.addEventListener('DOMContentLoaded', function () {
             datasets: [{
                 label: 'Did Not Match',
                 data: noMatchCounts,
-                backgroundColor: 'rgba(255, 99, 132, 0.6)',
-                borderColor: 'rgba(255, 99, 132, 1)',
+                backgroundColor: '#e16d00',
+                borderColor: '#b45600',
                 borderWidth: 1
             }]
         },
@@ -895,7 +907,7 @@ function updateCharts(probabilityPercent) {
         type: 'line',
         xMin: binIndex,
         xMax: binIndex,
-        borderColor: 'blue', // Changed to black
+        borderColor: '#a40000', 
         borderWidth: 2,
         borderDash: [6, 6], // Keeping it dotted
         label: {
@@ -903,9 +915,9 @@ function updateCharts(probabilityPercent) {
             enabled: true,
             position: "end",
             yAdjust: -50, // Move the label up by 50 pixels
-            backgroundColor: 'rgba(0, 0, 128, 0.8)', // Blue background with some transparency
+            backgroundColor: '#a40000',
             font: {
-                size: 12 // Optional: Adjust font size here if needed
+                size: 12 // Optional: Adjust font size here if needed 
             }
         }
     };
@@ -915,23 +927,20 @@ function updateCharts(probabilityPercent) {
         type: 'line',
         xMin: 14, // This corresponds to the 70-75% bin
         xMax: 14,
-        borderColor: 'green', // Changed to blue
+        borderColor: '#707070', 
         borderDash: [6, 6], // Keeping it dotted for the optimal score line
         label: {
-            content: 'Average score: 70%',
+            content: 'Average (all applicants): 70%',
             enabled: true,
             position: "end",
             yAdjust: -120, // Move the label up
-            backgroundColor: 'rgba(0, 100, 0, 0.8)', // Green background with some transparency
+            backgroundColor: '#707070',
             font: {
                 size: 12 // Optional: Adjust font size here if needed
             }
         }
     };
 
-
-    // Add tooltip for the optimal score line
-    const tooltipText = "At cutoff 83.0% (by Youden index, the value with the optimal tradeoff between sensitivity and specificity): Sensitivity 71.57%, Specificity 83.15%, Positive predictive value 90.38%, Negative predictive value 56.92%";
 
     // Check if charts have been initialized
     if (matchChart && noMatchChart) {
